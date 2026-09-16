@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Drips Wave docs
+    url: https://docs.drips.network/wave/
+    about: How Stellar Wave issues, points, and maintainer flows work

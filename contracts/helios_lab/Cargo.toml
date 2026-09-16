@@ -1,0 +1,16 @@
+[package]
+name = "helios-lab"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Helios Lab registry — on-chain builder check-in for the Stellar Testnet lab"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = "28.0.0-rc.2"
+
+[dev-dependencies]
+soroban-sdk = { version = "28.0.0-rc.2", features = ["testutils"] }

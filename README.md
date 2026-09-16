@@ -1,68 +1,78 @@
-# Stellar Wallet — White Belt Level 1
+# Helios Lab
 
-A Stellar Testnet wallet built with React, the Stellar SDK, and **Freighter wallet integration**.
+**Helios Lab** is an open-source Stellar Testnet monorepo for builders and [Stellar Wave / Drips](https://www.drips.network/wave/stellar) contributors.
+
+When you apply the repo on Drips, tag / describe it across all three layers:
+
+| Layer | Path | Role |
+|-------|------|------|
+| **Frontend** | `frontend/` | React + Vite + Freighter wallet lab UI |
+| **Backend** | `backend/` | Express API — Horizon helpers, network + contract config |
+| **Contract** | `contracts/helios_lab/` | Soroban registry (`register` / `get_builder` / `lab_name`) |
+
+## Architecture
+
+```
+helios-lab/
+├── frontend/          # Freighter connect, fund, trustlines, send, history, lab panel
+├── backend/           # /health, /api/network, /api/account, /api/payments
+├── contracts/         # Soroban helios_lab crate
+├── docs/              # Wave backlog notes
+└── README.md
+```
+
+## Quick start
+
+```bash
+# install JS workspaces
+npm install
+
+# terminal 1 — API
+npm run dev:backend
+
+# terminal 2 — UI (http://localhost:5173)
+npm run dev:frontend
+```
+
+Freighter must be on **Testnet**.
+
+### Contracts
+
+```bash
+rustup target add wasm32v1-none
+cargo test --manifest-path contracts/helios_lab/Cargo.toml
+cargo build --manifest-path contracts/Cargo.toml --target wasm32v1-none --release
+```
+
+Deploy steps: [contracts/README.md](./contracts/README.md). After deploy, set `HELIOS_LAB_CONTRACT_ID` for the backend.
 
 ## Features
 
-- **Connect Wallet** — Connect via Freighter browser extension using `setAllowed` + `getAddress`
-- **Fund with Friendbot** — Activate account with 10,000 Testnet XLM
-- **Check Balance** — View real-time XLM balance from Horizon
-- **Send XLM** — Build payment transactions and sign them via Freighter's `signTransaction`
-- **Transaction History** — View last 10 payments with explorer links
+- Freighter connect / disconnect (`setAllowed`, `getAddress`, `signTransaction`)
+- Friendbot funding
+- Balances + `changeTrust`
+- Native XLM payments + history
+- Backend-backed account/payment reads (Horizon fallback)
+- Lab panel for API + contract status
 
-## Tech Stack
+## Drips Wave application tip
 
-- React + Vite
-- [@stellar/stellar-sdk](https://github.com/stellar/js-stellar-sdk)
-- [@stellar/freighter-api](https://www.npmjs.com/package/@stellar/freighter-api)
-- Stellar Horizon Testnet API
-- Stellar Friendbot
+In the maintainer apply flow, present Helios Lab as a **full-stack Stellar lab**:
 
-## Prerequisites
+1. **Frontend** — wallet UX and Freighter integration  
+2. **Backend** — Horizon aggregation API for the lab  
+3. **Smart contract** — Soroban builder check-in registry  
 
-1. Install the [Freighter browser extension](https://www.freighter.app/)
-2. Set Freighter network to **Testnet**
+Point reviewers at this README, `contracts/`, `backend/src/index.js`, and open issues labeled `stellar-wave`.
 
-## Getting Started
+## Contributing
 
-```bash
-npm install
-npm run dev
-```
+See [CONTRIBUTING.md](./CONTRIBUTING.md) and [docs/wave-backlog.md](./docs/wave-backlog.md).
 
-Open [http://localhost:5173](http://localhost:5173)
+## License
 
-## How to Use
-
-1. Click **Connect Wallet** — approve the app in Freighter (`setAllowed`)
-2. Go to **Fund** tab → click **Fund with Friendbot** to get 10,000 XLM
-3. Go to **Send** tab → enter destination and amount → approve signing in Freighter
-4. Go to **History** tab to see your transactions
-
-## Freighter Integration
-
-| API | Usage |
-|-----|-------|
-| `isConnected` | Check if Freighter extension is installed |
-| `setAllowed` | Request permission to connect |
-| `getAddress` | Retrieve connected wallet public key |
-| `signTransaction` | Sign payment transactions before submission |
+MIT — [LICENSE](./LICENSE).
 
 ## Network
 
-All transactions run on **Stellar Testnet** — no real funds involved.
-
-## Screenshots
-
-### Wallet Connected via Freighter
-![Wallet Connected](./screenshots/01-wallet-connected.png)
-
-### Transaction Signing in Freighter (`signTransaction`)
-![Freighter Signing](./screenshots/02-freighter-signing.png)
-
-### Balance Displayed & Successful Testnet Transaction
-![Transaction Success](./screenshots/03-transaction-success.png)
-
----
-
-Built for the [Rise In — Stellar Journey to Mastery](https://risein.com/programs/stellar-journey-to-mastery-monthly-builder-challenges) White Belt Level 1 challenge.
+Testnet only by default. No Mainnet funds.
