@@ -1,9 +1,9 @@
 [package]
-name = "helios-lab"
+name = "kitewell"
 version = "0.1.0"
 edition = "2021"
 publish = false
-description = "Helios Lab registry — on-chain builder check-in for the Stellar Testnet lab"
+description = "Kitewell registry — on-chain builder check-in for the Stellar Testnet lab"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

@@ -1,6 +1,6 @@
-# Contributing to Helios Lab
+# Contributing to Kitewell
 
-Thanks for helping grow Helios Lab. This monorepo has three contribution surfaces:
+Thanks for helping grow Kitewell. This monorepo has three contribution surfaces:
 
 | Area | Path | Typical skills |
 |------|------|----------------|
@@ -19,7 +19,7 @@ npm run dev:frontend  # :5173
 Contract tests:
 
 ```bash
-cargo test --manifest-path contracts/helios_lab/Cargo.toml
+cargo test --manifest-path contracts/kitewell/Cargo.toml
 ```
 
 ## PR guidelines
@@ -31,7 +31,7 @@ cargo test --manifest-path contracts/helios_lab/Cargo.toml
 
 ## Wave maintainers
 
-1. Apply the **whole** `helios-lab` repo to Stellar Wave (not three separate repos)
+1. Apply the **whole** `kitewell` repo to Stellar Wave (not three separate repos)
 2. Describe layers as Frontend + Backend + Smart Contract in the application notes
 3. Add scoped issues from [docs/wave-backlog.md](./docs/wave-backlog.md)
 4. Assign quickly during the Wave week; merge before the Wave ends so contributors earn points

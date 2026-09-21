@@ -1,17 +1,17 @@
 #![no_std]
 use soroban_sdk::{contract, contractimpl, symbol_short, Address, Env, String, Symbol};
 
-const LAB: Symbol = symbol_short!("HELIOS");
+const LAB: Symbol = symbol_short!("KITEWELL");
 const COUNT: Symbol = symbol_short!("COUNT");
 
 #[contract]
-pub struct HeliosLab;
+pub struct Kitewell;
 
 #[contractimpl]
-impl HeliosLab {
+impl Kitewell {
     /// Returns the lab name. Useful as a smoke-test invoke.
     pub fn lab_name(env: Env) -> String {
-        String::from_str(&env, "Helios Lab")
+        String::from_str(&env, "Kitewell")
     }
 
     /// How many builders have checked in.
@@ -51,17 +51,17 @@ mod test {
     #[test]
     fn lab_name_works() {
         let env = Env::default();
-        let id = env.register(HeliosLab, ());
-        let client = HeliosLabClient::new(&env, &id);
-        assert_eq!(client.lab_name(), String::from_str(&env, "Helios Lab"));
+        let id = env.register(Kitewell, ());
+        let client = KitewellClient::new(&env, &id);
+        assert_eq!(client.lab_name(), String::from_str(&env, "Kitewell"));
     }
 
     #[test]
     fn register_and_count() {
         let env = Env::default();
         env.mock_all_auths();
-        let id = env.register(HeliosLab, ());
-        let client = HeliosLabClient::new(&env, &id);
+        let id = env.register(Kitewell, ());
+        let client = KitewellClient::new(&env, &id);
         let a = Address::generate(&env);
 
         assert_eq!(client.builder_count(), 0);

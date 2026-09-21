@@ -1,6 +1,6 @@
-# Helios Lab
+# Kitewell
 
-**Helios Lab** is an open-source Stellar Testnet monorepo for builders and [Stellar Wave / Drips](https://www.drips.network/wave/stellar) contributors.
+**Kitewell** is an open-source Stellar Testnet monorepo for builders and [Stellar Wave / Drips](https://www.drips.network/wave/stellar) contributors.
 
 When you apply the repo on Drips, tag / describe it across all three layers:
 
@@ -8,15 +8,15 @@ When you apply the repo on Drips, tag / describe it across all three layers:
 |-------|------|------|
 | **Frontend** | `frontend/` | React + Vite + Freighter wallet lab UI |
 | **Backend** | `backend/` | Express API — Horizon helpers, network + contract config |
-| **Contract** | `contracts/helios_lab/` | Soroban registry (`register` / `get_builder` / `lab_name`) |
+| **Contract** | `contracts/kitewell/` | Soroban registry (`register` / `get_builder` / `lab_name`) |
 
 ## Architecture
 
 ```
-helios-lab/
+kitewell/
 ├── frontend/          # Freighter connect, fund, trustlines, send, history, lab panel
 ├── backend/           # /health, /api/network, /api/account, /api/payments
-├── contracts/         # Soroban helios_lab crate
+├── contracts/         # Soroban kitewell crate
 ├── docs/              # Wave backlog notes
 └── README.md
 ```
@@ -40,11 +40,11 @@ Freighter must be on **Testnet**.
 
 ```bash
 rustup target add wasm32v1-none
-cargo test --manifest-path contracts/helios_lab/Cargo.toml
+cargo test --manifest-path contracts/kitewell/Cargo.toml
 cargo build --manifest-path contracts/Cargo.toml --target wasm32v1-none --release
 ```
 
-Deploy steps: [contracts/README.md](./contracts/README.md). After deploy, set `HELIOS_LAB_CONTRACT_ID` for the backend.
+Deploy steps: [contracts/README.md](./contracts/README.md). After deploy, set `KITEWELL_CONTRACT_ID` for the backend.
 
 ## Features
 
@@ -57,7 +57,7 @@ Deploy steps: [contracts/README.md](./contracts/README.md). After deploy, set `H
 
 ## Drips Wave application tip
 
-In the maintainer apply flow, present Helios Lab as a **full-stack Stellar lab**:
+In the maintainer apply flow, present Kitewell as a **full-stack Stellar lab**:
 
 1. **Frontend** — wallet UX and Freighter integration  
 2. **Backend** — Horizon aggregation API for the lab  

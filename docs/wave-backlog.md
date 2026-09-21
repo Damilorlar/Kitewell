@@ -1,4 +1,4 @@
-# Helios Lab — Wave backlog (draft issues)
+# Kitewell — Wave backlog (draft issues)
 
 Create these as GitHub issues after the repo is approved (or before, so the backlog is ready). In Drips, set complexity when adding to the Stellar Wave program.
 
@@ -126,7 +126,7 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 
 ---
 
-## 11. Invoke `helios_lab.register` from the Lab tab — High
+## 11. Invoke `kitewell.register` from the Lab tab — High
 
 **Layer:** Frontend + Contract
 
@@ -168,5 +168,5 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 - [ ] `register` rejects when paused
 - [ ] Unit tests
 
-**Files:** `contracts/helios_lab/src/lib.rs`
+**Files:** `contracts/kitewell/src/lib.rs`
 

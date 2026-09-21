@@ -11,8 +11,8 @@ const FRIENDBOT_URL =
 const EXPLORER_BASE =
   process.env.EXPLORER_BASE || "https://stellar.expert/explorer/testnet";
 
-/** Optional: set after deploying contracts/helios_lab on Testnet */
-const HELIOS_LAB_CONTRACT_ID = process.env.HELIOS_LAB_CONTRACT_ID || null;
+/** Optional: set after deploying contracts/kitewell on Testnet */
+const KITEWELL_CONTRACT_ID = process.env.KITEWELL_CONTRACT_ID || null;
 
 const server = new StellarSdk.Horizon.Server(HORIZON_URL);
 const app = express();
@@ -23,7 +23,7 @@ app.use(express.json());
 app.get("/health", (_req, res) => {
   res.json({
     ok: true,
-    service: "helios-lab-backend",
+    service: "kitewell-backend",
     network: NETWORK,
     horizon: HORIZON_URL,
   });
@@ -37,8 +37,8 @@ app.get("/api/network", (_req, res) => {
     explorerBase: EXPLORER_BASE,
     passphrase: StellarSdk.Networks.TESTNET,
     contract: {
-      heliosLab: HELIOS_LAB_CONTRACT_ID,
-      status: HELIOS_LAB_CONTRACT_ID ? "configured" : "not_deployed",
+      kitewell: KITEWELL_CONTRACT_ID,
+      status: KITEWELL_CONTRACT_ID ? "configured" : "not_deployed",
     },
   });
 });
@@ -132,6 +132,6 @@ app.get("/api/payments/:address", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Helios Lab backend listening on http://localhost:${PORT}`);
+  console.log(`Kitewell backend listening on http://localhost:${PORT}`);
   console.log(`Network: ${NETWORK} · Horizon: ${HORIZON_URL}`);
 });

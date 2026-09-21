@@ -1,8 +1,8 @@
 {
-  "name": "helios-lab",
+  "name": "kitewell",
   "private": true,
   "version": "0.1.0",
-  "description": "Helios Lab monorepo — frontend, backend, and Soroban contracts for Stellar Testnet",
+  "description": "Kitewell monorepo — frontend, backend, and Soroban contracts for Stellar Testnet",
   "workspaces": [
     "frontend",
     "backend"
@@ -16,8 +16,8 @@
     "build:frontend": "npm run build -w frontend",
     "start:backend": "npm run start -w backend",
     "lint": "npm run lint -w frontend",
-    "build:contracts": "stellar contract build --manifest-path contracts/helios_lab/Cargo.toml",
-    "test:contracts": "cargo test --manifest-path contracts/helios_lab/Cargo.toml"
+    "build:contracts": "stellar contract build --manifest-path contracts/kitewell/Cargo.toml",
+    "test:contracts": "cargo test --manifest-path contracts/kitewell/Cargo.toml"
   },
   "engines": {
     "node": ">=20"

@@ -1,9 +1,9 @@
 {
-  "name": "@helios-lab/backend",
+  "name": "@kitewell/backend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Helios Lab backend — Horizon helpers and lab API for Testnet",
+  "description": "Kitewell backend — Horizon helpers and lab API for Testnet",
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js"

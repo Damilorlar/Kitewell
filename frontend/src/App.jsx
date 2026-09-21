@@ -190,9 +190,9 @@ export default function App() {
 
       <header className="header">
         <div className="header__brand">
-          <HeliosMark />
+          <KitewellMark />
           <div className="header__titles">
-            <span className="header__name">Helios Lab</span>
+            <span className="header__name">Kitewell</span>
             <span className="header__tag">Stellar Testnet lab</span>
           </div>
         </div>
@@ -310,7 +310,7 @@ export default function App() {
               {requireWallet ? (
                 <>
                   <p className="muted">
-                    Helios Lab requests access with Freighter&apos;s{" "}
+                    Kitewell requests access with Freighter&apos;s{" "}
                     <code>setAllowed</code> / <code>getAddress</code> APIs. Keys never leave
                     the extension.
                   </p>
@@ -526,7 +526,7 @@ export default function App() {
                 </button>
               </div>
               <p className="muted">
-                Helios Lab is a monorepo: <code>frontend</code> · <code>backend</code> ·{" "}
+                Kitewell is a monorepo: <code>frontend</code> · <code>backend</code> ·{" "}
                 <code>contracts</code>. This panel reads the local API and contract config.
               </p>
               {labError && (
@@ -549,9 +549,9 @@ export default function App() {
                     <code>{labInfo.network.horizonUrl}</code>
                   </div>
                   <div className="info-box">
-                    <span className="eyebrow">Soroban · helios_lab</span>
+                    <span className="eyebrow">Soroban · kitewell</span>
                     <code>
-                      {labInfo.network.contract?.heliosLab ||
+                      {labInfo.network.contract?.kitewell ||
                         "Not deployed yet — see contracts/README.md"}
                     </code>
                     <p className="muted" style={{ marginTop: 6 }}>
@@ -626,9 +626,9 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <strong>Helios Lab</strong> · Stellar Testnet · Freighter ·{" "}
+        <strong>Kitewell</strong> · Stellar Testnet · Freighter ·{" "}
         <a
-          href="https://github.com/CemAyyildiz/helios-lab"
+          href="https://github.com/Kitewell-lab/Kitewell"
           target="_blank"
           rel="noreferrer"
         >
@@ -644,7 +644,7 @@ function shorten(key) {
   return `${key.slice(0, 6)}…${key.slice(-6)}`;
 }
 
-function HeliosMark() {
+function KitewellMark() {
   return (
     <svg className="mark" width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden>
       <circle cx="18" cy="18" r="18" fill="#121826" />
