@@ -46,6 +46,14 @@ cargo build --manifest-path contracts/Cargo.toml --target wasm32v1-none --releas
 
 Deploy steps: [contracts/README.md](./contracts/README.md). After deploy, set `KITEWELL_CONTRACT_ID` for the backend.
 
+### Tests (JS)
+
+```bash
+npm test
+```
+
+Vitest suite in `frontend/src/stellar.test.js` covers the stellar helpers (explorer URLs, Friendbot funding, balance/payment mapping, backend → Horizon fallback) with mocked Horizon SDK and API calls — CI-friendly, no Freighter wallet or network access required.
+
 ## Features
 
 - Freighter connect / disconnect (`setAllowed`, `getAddress`, `signTransaction`)
