@@ -55,6 +55,8 @@ Deploy steps: [contracts/README.md](./contracts/README.md). After deploy, set `K
 - Backend-backed account/payment reads (Horizon fallback)
 - Lab panel for API + contract status
 
+Send supports optional text memos up to 28 UTF-8 bytes, uint64 ID memos, and 32-byte hash memos.
+
 ## Drips Wave application tip
 
 In the maintainer apply flow, present Kitewell as a **full-stack Stellar lab**:

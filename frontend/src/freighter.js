@@ -9,6 +9,35 @@ import { HORIZON_URL } from "./stellar";
 
 const server = new StellarSdk.Horizon.Server(HORIZON_URL);
 const NETWORK_PASSPHRASE = StellarSdk.Networks.TESTNET;
+const MAX_MEMO_TEXT_BYTES = 28;
+const MAX_U64 = 18446744073709551615n;
+
+function createMemo(memoType, value) {
+  if (!value) return null;
+
+  if (memoType === "text") {
+    if (new TextEncoder().encode(value).length > MAX_MEMO_TEXT_BYTES) {
+      throw new Error("Text memos must be 28 UTF-8 bytes or fewer.");
+    }
+    return StellarSdk.Memo.text(value);
+  }
+
+  if (memoType === "id") {
+    if (!/^\d{1,20}$/.test(value) || BigInt(value) > MAX_U64) {
+      throw new Error("ID memos must be unsigned 64-bit integers.");
+    }
+    return StellarSdk.Memo.id(value);
+  }
+
+  if (memoType === "hash") {
+    if (!/^[0-9a-fA-F]{64}$/.test(value)) {
+      throw new Error("Hash memos must be exactly 64 hexadecimal characters.");
+    }
+    return StellarSdk.Memo.hash(value);
+  }
+
+  throw new Error(`Unsupported memo type: ${memoType}`);
+}
 
 export async function checkFreighterInstalled() {
   const result = await isConnected();
@@ -63,12 +92,14 @@ export async function sendPaymentWithFreighter(
   publicKey,
   destination,
   amount,
+  memoType = "text",
   memo = ""
 ) {
   if (!StellarSdk.StrKey.isValidEd25519PublicKey(destination)) {
     throw new Error("Destination must be a valid Stellar public key (G…).");
   }
 
+  const transactionMemo = createMemo(memoType, memo);
   const sourceAccount = await server.loadAccount(publicKey);
   const txBuilder = new StellarSdk.TransactionBuilder(sourceAccount, {
     fee: StellarSdk.BASE_FEE,
@@ -81,8 +112,8 @@ export async function sendPaymentWithFreighter(
     })
   );
 
-  if (memo) {
-    txBuilder.addMemo(StellarSdk.Memo.text(memo.slice(0, 28)));
+  if (transactionMemo) {
+    txBuilder.addMemo(transactionMemo);
   }
 
   const transaction = txBuilder.setTimeout(180).build();
