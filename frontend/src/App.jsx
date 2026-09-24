@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
   checkFreighterInstalled,
   connectFreighterWallet,
@@ -29,6 +29,7 @@ export default function App() {
   const [trustForm, setTrustForm] = useState({ code: "", issuer: "", limit: "1000000" });
   const [labInfo, setLabInfo] = useState(null);
   const [labError, setLabError] = useState(null);
+  const tabRefs = useRef([]);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -182,11 +183,41 @@ export default function App() {
     }
   };
 
+  const activateTab = (tab) => {
+    setActiveTab(tab);
+    if (tab === "History") handleHistory();
+    if (tab === "Lab") loadLabInfo();
+    if ((tab === "Wallet" || tab === "Assets") && publicKey) refreshBalances();
+  };
+
+  const handleTabKeyDown = (event, index) => {
+    let nextIndex;
+
+    if (event.key === "ArrowRight") nextIndex = (index + 1) % TABS.length;
+    else if (event.key === "ArrowLeft") nextIndex = (index - 1 + TABS.length) % TABS.length;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = TABS.length - 1;
+    else return;
+
+    event.preventDefault();
+    activateTab(TABS[nextIndex]);
+    tabRefs.current[nextIndex]?.focus();
+  };
+
   return (
     <div className="app">
       <div className="aurora" aria-hidden="true" />
 
-      {toast && <div className={`toast toast--${toast.type}`}>{toast.message}</div>}
+      {toast && (
+        <div
+          className={`toast toast--${toast.type}`}
+          role={toast.type === "error" ? "alert" : "status"}
+          aria-live={toast.type === "error" ? "assertive" : "polite"}
+          aria-atomic="true"
+        >
+          {toast.message}
+        </div>
+      )}
 
       <header className="header">
         <div className="header__brand">
@@ -218,6 +249,7 @@ export default function App() {
                     onClick={refreshBalances}
                     disabled={loading === "balance"}
                     title="Refresh balances"
+                    aria-label="Refresh balances"
                     type="button"
                   >
                     {loading === "balance" ? <Spinner size={14} /> : "↻"}
@@ -235,6 +267,7 @@ export default function App() {
                     showToast("Address copied.");
                   }}
                   title="Copy"
+                  aria-label="Copy public key"
                 >
                   ⎘
                 </button>
@@ -273,25 +306,40 @@ export default function App() {
           )}
         </section>
 
-        <nav className="tabs" aria-label="Lab sections">
-          {TABS.map((t) => (
-            <button
-              key={t}
-              type="button"
-              className={`tab ${activeTab === t ? "tab--active" : ""}`}
-              onClick={() => {
-                setActiveTab(t);
-                if (t === "History") handleHistory();
-                if (t === "Lab") loadLabInfo();
-                if ((t === "Wallet" || t === "Assets") && publicKey) refreshBalances();
-              }}
-            >
-              {t}
-            </button>
-          ))}
+        <nav className="tabs" aria-label="Lab sections" role="tablist">
+          {TABS.map((t, index) => {
+            const isActive = activeTab === t;
+            const tabId = `tab-${t.toLowerCase()}`;
+
+            return (
+              <button
+                key={t}
+                ref={(element) => {
+                  tabRefs.current[index] = element;
+                }}
+                id={tabId}
+                type="button"
+                role="tab"
+                className={`tab ${isActive ? "tab--active" : ""}`}
+                aria-selected={isActive}
+                aria-controls={`panel-${t.toLowerCase()}`}
+                tabIndex={isActive ? 0 : -1}
+                onClick={() => activateTab(t)}
+                onKeyDown={(event) => handleTabKeyDown(event, index)}
+              >
+                {t}
+              </button>
+            );
+          })}
         </nav>
 
-        <section className="panel">
+        <section
+          className="panel"
+          id={`panel-${activeTab.toLowerCase()}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${activeTab.toLowerCase()}`}
+          tabIndex={0}
+        >
           {activeTab === "Wallet" && (
             <div className="section">
               <h2>Connect wallet</h2>
