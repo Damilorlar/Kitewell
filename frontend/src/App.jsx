@@ -16,6 +16,23 @@ import { fetchHealth, fetchNetworkInfo } from "./api";
 import "./App.css";
 
 const TABS = ["Wallet", "Fund", "Assets", "Send", "History", "Lab"];
+const MEMO_FIELDS = {
+  text: {
+    maxLength: 28,
+    placeholder: "Up to 28 UTF-8 bytes",
+  },
+  id: {
+    maxLength: 20,
+    pattern: "[0-9]{1,20}",
+    placeholder: "Unsigned 64-bit integer",
+    inputMode: "numeric",
+  },
+  hash: {
+    maxLength: 64,
+    pattern: "[0-9a-fA-F]{64}",
+    placeholder: "64 hexadecimal characters",
+  },
+};
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("Wallet");
@@ -25,7 +42,12 @@ export default function App() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState("");
   const [toast, setToast] = useState(null);
-  const [sendForm, setSendForm] = useState({ destination: "", amount: "", memo: "" });
+  const [sendForm, setSendForm] = useState({
+    destination: "",
+    amount: "",
+    memoType: "text",
+    memo: "",
+  });
   const [trustForm, setTrustForm] = useState({ code: "", issuer: "", limit: "1000000" });
   const [labInfo, setLabInfo] = useState(null);
   const [labError, setLabError] = useState(null);
@@ -37,6 +59,7 @@ export default function App() {
   };
 
   const xlmBalance = balances.find((b) => b.isNative)?.balance ?? null;
+  const memoField = MEMO_FIELDS[sendForm.memoType];
 
   useEffect(() => {
     checkFreighterInstalled().then(setFreighterInstalled);
@@ -131,17 +154,24 @@ export default function App() {
     if (!sendForm.destination || !sendForm.amount) {
       return showToast("Destination and amount are required.", "error");
     }
+    if (
+      sendForm.memoType === "text" &&
+      new TextEncoder().encode(sendForm.memo).length > 28
+    ) {
+      return showToast("Text memos must be 28 UTF-8 bytes or fewer.", "error");
+    }
     setLoading("send");
     try {
       const result = await sendPaymentWithFreighter(
         publicKey,
         sendForm.destination,
         sendForm.amount,
+        sendForm.memoType,
         sendForm.memo
       );
       const next = await getAccountBalances(publicKey);
       setBalances(next);
-      setSendForm({ destination: "", amount: "", memo: "" });
+      setSendForm({ destination: "", amount: "", memoType: "text", memo: "" });
       showToast(`Payment submitted · ${result.hash.slice(0, 12)}…`);
     } catch (err) {
       showToast(err.message || "Payment failed.", "error");
@@ -528,12 +558,30 @@ export default function App() {
                   onChange={(e) => setSendForm({ ...sendForm, amount: e.target.value })}
                   required
                 />
+                <label className="label">Memo type</label>
+                <select
+                  className="input"
+                  value={sendForm.memoType}
+                  onChange={(e) =>
+                    setSendForm({
+                      ...sendForm,
+                      memoType: e.target.value,
+                      memo: "",
+                    })
+                  }
+                >
+                  <option value="text">Text</option>
+                  <option value="id">ID</option>
+                  <option value="hash">Hash</option>
+                </select>
                 <label className="label">Memo (optional)</label>
                 <input
                   className="input"
                   type="text"
-                  maxLength={28}
-                  placeholder="Up to 28 characters"
+                  maxLength={memoField.maxLength}
+                  pattern={memoField.pattern}
+                  inputMode={memoField.inputMode}
+                  placeholder={memoField.placeholder}
                   value={sendForm.memo}
                   onChange={(e) => setSendForm({ ...sendForm, memo: e.target.value })}
                 />
