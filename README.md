@@ -1,5 +1,7 @@
 # Kitewell
 
+![Demo](https://img.shields.io/badge/demo-🌐-brightgreen)
+
 **Kitewell** is an open-source Stellar Testnet monorepo for builders and [Stellar Wave / Drips](https://www.drips.network/wave/stellar) contributors.
 
 When you apply the repo on Drips, tag / describe it across all three layers:
@@ -35,6 +37,10 @@ npm run dev:frontend
 ```
 
 Freighter must be on **Testnet**.
+
+## Demo
+
+The frontend is deployed at https://kitewell.vercel.app or https://kitewell.github.io/kitewell/
 
 ### Contracts
 
