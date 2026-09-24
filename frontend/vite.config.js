@@ -9,6 +9,7 @@ const require = createRequire(import.meta.url);
 const bufferPath = path.dirname(require.resolve("buffer/"));
 
 export default defineConfig({
+  base: '/kitewell/',
   plugins: [react()],
   resolve: {
     alias: {
