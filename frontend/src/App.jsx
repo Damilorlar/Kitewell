@@ -8,6 +8,7 @@ import {
 import {
   fundWithFriendbot,
   getAccountBalances,
+  getAccountDetails,
   getTransactions,
   explorerAccountUrl,
   explorerTxUrl,
@@ -52,6 +53,7 @@ export default function App() {
   const [labInfo, setLabInfo] = useState(null);
   const [labError, setLabError] = useState(null);
   const tabRefs = useRef([]);
+  const [accountDetails, setAccountDetails] = useState(null);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -71,6 +73,12 @@ export default function App() {
     try {
       const next = await getAccountBalances(publicKey);
       setBalances(next);
+      try {
+        const details = await getAccountDetails(publicKey);
+        setAccountDetails(details);
+      } catch {
+        setAccountDetails(null);
+      }
     } catch {
       setBalances([]);
       showToast("Account not found on Testnet yet. Fund it with Friendbot.", "error");
@@ -104,6 +112,7 @@ export default function App() {
     setPublicKey(null);
     setBalances([]);
     setTransactions([]);
+    setAccountDetails(null);
     showToast("Disconnected.");
   };
 
@@ -413,6 +422,38 @@ export default function App() {
                     <span className="eyebrow">Connected address</span>
                     <code>{publicKey}</code>
                   </div>
+                  {accountDetails && (
+                    <div className="info-box">
+                      <span className="eyebrow">Account metadata</span>
+                      <div className="metadata-grid">
+                        <div>
+                          <span className="metadata-label">Sequence</span>
+                          <span className="metadata-value">{accountDetails.sequence}</span>
+                        </div>
+                        <div>
+                          <span className="metadata-label">Subentries</span>
+                          <span className="metadata-value">{accountDetails.subentryCount}</span>
+                        </div>
+                        <div>
+                          <span className="metadata-label">Thresholds</span>
+                          <span className="metadata-value">
+                            {accountDetails.thresholds?.low ? accountDetails.thresholds.low : "—"},
+                            {accountDetails.thresholds?.medium ? accountDetails.thresholds.medium : "—"},
+                            {accountDetails.thresholds?.high ? accountDetails.thresholds.high : "—"}
+                          </span>
+                        </div>
+                      </div>
+                      <a
+                        href={explorerAccountUrl(publicKey)}
+                        className="text-link"
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ marginTop: 8, display: "inline-block" }}
+                      >
+                        StellarExpert ↗
+                      </a>
+                    </div>
+                  )}
                   <button className="btn btn--secondary" type="button" onClick={handleDisconnect}>
                     Disconnect
                   </button>
