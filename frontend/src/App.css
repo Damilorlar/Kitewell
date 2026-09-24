@@ -26,6 +26,14 @@
   --sans: "DM Sans", system-ui, sans-serif;
 }
 
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 3px;
+}
+
 body {
   min-height: 100vh;
   color: var(--text);
