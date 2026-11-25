@@ -1,0 +1,18 @@
+[workspace]
+
+[package]
+name = "byte32-commit-reveal"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Generic 32-byte commit-reveal primitive for Soroban"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = "28.0.0-rc.2"
+
+[dev-dependencies]
+soroban-sdk = { version = "28.0.0-rc.2", features = ["testutils"] }

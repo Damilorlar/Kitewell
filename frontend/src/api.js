@@ -12,6 +12,16 @@ export async function fetchHealth() {
   return res.json();
 }
 
+/** Read the latest ledger sequence directly from the selected Horizon. */
+export async function fetchLatestHorizonLedger(horizonUrl) {
+  const base = String(horizonUrl || "").replace(/\/$/, "");
+  const res = await fetch(`${base}/ledgers?order=desc&limit=1`);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error("Latest Horizon ledger fetch failed");
+  const sequence = data?._embedded?.records?.[0]?.sequence;
+  return sequence == null ? null : Number(sequence);
+}
+
 export async function fetchAccountViaApi(publicKey) {
   const res = await fetch(`${API_BASE}/api/account/${publicKey}`);
   const data = await res.json().catch(() => ({}));
@@ -19,11 +29,15 @@ export async function fetchAccountViaApi(publicKey) {
   return data;
 }
 
-export async function fetchPaymentsViaApi(publicKey, limit = 15) {
-  const res = await fetch(
-    `${API_BASE}/api/payments/${publicKey}?limit=${limit}`
-  );
+export async function fetchPaymentsViaApi(publicKey, limit = 15, cursor, options = {}) {
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (cursor) params.set("cursor", cursor);
+
+  const url = `${API_BASE}/api/payments/${publicKey}?${params.toString()}`;
+  const res = options.signal
+    ? await fetch(url, { signal: options.signal })
+    : await fetch(url);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || "Payments fetch failed");
-  return data.records || [];
+  return { records: data.records || [], nextCursor: data.nextCursor ?? null };
 }

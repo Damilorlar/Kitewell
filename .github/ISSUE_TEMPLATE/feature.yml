@@ -34,4 +34,4 @@ body:
     id: files
     attributes:
       label: Likely files
-      placeholder: src/App.jsx, src/stellar.js, …
+      placeholder: frontend/src/App.jsx, frontend/src/stellar.js, backend/src/index.js, contracts/kitewell/src/lib.rs

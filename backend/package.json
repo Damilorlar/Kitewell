@@ -6,7 +6,8 @@
   "description": "Kitewell backend — Horizon helpers and lab API for Testnet",
   "scripts": {
     "dev": "node --watch src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "node --test"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^16.0.1",

@@ -30,7 +30,7 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 - [ ] Friendbot disabled off Testnet
 - [ ] Persistent preference (`localStorage`)
 
-**Files:** `src/stellar.js`, `src/freighter.js`, `src/App.jsx`
+**Files:** `frontend/src/stellar.js`, `frontend/src/freighter.js`, `frontend/src/App.jsx`
 
 ---
 
@@ -44,7 +44,7 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 - [ ] Blocks when balance &gt; 0 with clear message
 - [ ] Refreshes balances after submit
 
-**Files:** `src/App.jsx`, `src/freighter.js`
+**Files:** `frontend/src/App.jsx`, `frontend/src/freighter.js`
 
 ---
 
@@ -57,7 +57,7 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 - [ ] Payment op uses selected `Asset`
 - [ ] Validation for insufficient balance
 
-**Files:** `src/freighter.js`, `src/App.jsx`
+**Files:** `frontend/src/freighter.js`, `frontend/src/App.jsx`
 
 ---
 
@@ -70,7 +70,7 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 - [ ] Refresh with balances
 - [ ] Link to StellarExpert account
 
-**Files:** `src/stellar.js`, `src/App.jsx`
+**Files:** `frontend/src/stellar.js`, `frontend/src/App.jsx`
 
 ---
 
@@ -83,7 +83,7 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 - [ ] Correct `Memo.*` construction
 - [ ] Docs in README
 
-**Files:** `src/freighter.js`, `src/App.jsx`
+**Files:** `frontend/src/freighter.js`, `frontend/src/App.jsx`
 
 ---
 
@@ -96,7 +96,7 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 - [ ] Toast announced via `aria-live`
 - [ ] Visible focus styles
 
-**Files:** `src/App.jsx`, `src/App.css`
+**Files:** `frontend/src/App.jsx`, `frontend/src/App.css`
 
 ---
 
@@ -109,7 +109,7 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 - [ ] `base` path correct for Vite if needed
 - [ ] README badge + demo link
 
-**Files:** `vite.config.js`, `.github/workflows/*`, `README.md`
+**Files:** `frontend/vite.config.js`, `.github/workflows/*`, `README.md`
 
 ---
 
@@ -119,10 +119,10 @@ Suggested labels: `good first issue`, `enhancement`, `documentation`, `stellar-w
 
 **Acceptance**
 - [ ] Vitest setup
-- [ ] ≥3 tests for `stellar.js` mappers / validation wrappers
+- [ ] ≥3 tests for `frontend/src/stellar.js` mappers / validation wrappers
 - [ ] `npm test` script
 
-**Files:** `package.json`, `src/**/*.test.js`
+**Files:** `frontend/package.json`, `frontend/src/**/*.test.js`
 
 ---
 
