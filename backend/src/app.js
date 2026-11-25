@@ -217,6 +217,13 @@ export function createApp({ horizon, env = process.env } = {}) {
           transaction_hash: p.transaction_hash,
           created_at: p.created_at,
           ...mapTransactionFee(p.transaction),
+          ...(typeof p.transaction?.memo_type === "string"
+            ? {
+                memo_type: p.transaction.memo_type,
+                memo: p.transaction.memo ?? null,
+                memo_bytes: p.transaction.memo_bytes ?? null,
+              }
+            : {}),
           explorerUrl: `${EXPLORER_BASE}/tx/${p.transaction_hash}`,
         }));
 

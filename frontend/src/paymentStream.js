@@ -1,5 +1,7 @@
 import * as StellarSdk from "@stellar/stellar-sdk";
 import { getActiveNetworkId, getNetworkById } from "./network";
+import { mapTransactionFee } from "./historyFee";
+import { paymentMemoFields } from "./paymentMemo";
 
 /**
  * Stream payments for the connected account while the history tab is open.
@@ -73,6 +75,7 @@ export function mapStreamPayment(event) {
     transaction_hash: event.transaction_hash,
     created_at: event.created_at,
     ...mapTransactionFee(event.transaction),
+    ...paymentMemoFields(event.transaction),
   };
 }
 

@@ -294,6 +294,24 @@ body {
   font-size: 12px;
   color: #c9c2b2;
 }
+.qr-code-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+.qr-code-panel__image {
+  width: 160px;
+  height: 160px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #ffffff;
+}
+.qr-code-panel__hint {
+  font-size: 12px;
+  text-align: center;
+}
 .hero-card__empty {
   display: flex;
   flex-direction: column;
@@ -731,6 +749,16 @@ body {
 .tx-item__fee {
   grid-column: 1 / -1;
   font-size: 11px;
+}
+.tx-item__memo {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 2px;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.tx-item__memo-value {
+  white-space: pre-wrap;
 }
 .tx-item__link {
   font-size: 11px;

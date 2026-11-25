@@ -300,7 +300,13 @@ test("GET /api/payments/:address filters out non-payment records", async (t) => 
           asset_code: "USDC",
           transaction_hash: "hash-payment",
           created_at: "2026-01-02T00:00:00Z",
-          transaction: { fee_charged: "100", operation_count: 1 },
+          transaction: {
+            fee_charged: "100",
+            operation_count: 1,
+            memo_type: "text",
+            memo: "invoice-42",
+            memo_bytes: "aW52b2ljZS00Mg==",
+          },
         },
         {
           id: "3",
@@ -346,6 +352,9 @@ test("GET /api/payments/:address filters out non-payment records", async (t) => 
       fee_charged: "100",
       operation_count: 1,
       fee_bumped: false,
+      memo_type: "text",
+      memo: "invoice-42",
+      memo_bytes: "aW52b2ljZS00Mg==",
       explorerUrl: "https://explorer.test.invalid/tx/hash-payment",
     },
     {
