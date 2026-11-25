@@ -9,6 +9,7 @@ import {
   NETWORKS,
 } from "./network";
 import { calculateMinimumBalance } from "./accountReserve";
+import { mapOutgoingSponsorships } from "./outgoingSponsorships";
 
 /** Shown in the lab panel when Horizon asks the client to slow down. */
 export const HORIZON_SLOWDOWN_MESSAGE =
@@ -863,6 +864,30 @@ export function buildManageSellOffer({
     },
     offerId: String(offerId),
   });
+}
+
+/**
+ * Load the reserves this account is sponsoring for other accounts and
+ * entries. Horizon indexes the operation history, so the read stays a plain
+ * read-only pagination; the mapper turns each sponsoring transaction into one
+ * row and drops sponsorships this account received from someone else.
+ *
+ * @param {string} publicKey connected account (G…)
+ * @returns {Promise<Array<{ sponsoredAccount: string, entryType: string }>>}
+ */
+export async function getOutgoingSponsorships(publicKey) {
+  if (!StellarSdk.StrKey.isValidEd25519PublicKey(publicKey)) {
+    throw new Error("Connect a valid Freighter address first.");
+  }
+
+  const page = await getServer()
+    .operations()
+    .forAccount(publicKey)
+    .order("desc")
+    .limit(200)
+    .call();
+
+  return mapOutgoingSponsorships(page.records || [], publicKey);
 }
 
 export async function getBalance(publicKey, options = {}) {

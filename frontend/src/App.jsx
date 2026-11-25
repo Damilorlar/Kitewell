@@ -44,6 +44,7 @@ import {
   getOpenOffers,
   getPendingTransactions,
   getClaimableBalances,
+  getOutgoingSponsorships,
   getLiquidityPool,
   liquidityPoolDeposit,
   liquidityPoolWithdraw,
@@ -78,8 +79,6 @@ import {
 import { validatePaymentAmount } from "./validatePaymentAmount";
 import { filterTransactionHistory } from "./txHistoryFilter";
 import { fetchHealth, fetchNetworkInfo } from "./api";
-import { toCsv } from "./freighter";
-
 import { decodeEnvelope, formatArgumentValue } from "./envelopeDecoder";
 import { formatSimulationFee } from "./simulationFees";
 import {
@@ -107,7 +106,6 @@ import {
   watchTransactionStatus,
 } from "./txStatusWatch";
 import { buildTransactionExplorerUrl } from "./explorerLink";
-
 import "./App.css";
 
 const TABS = [
@@ -275,13 +273,12 @@ export default function App() {
   const [signingConfirmationOpen, setSigningConfirmationOpen] = useState(false);
   const [labInfo, setLabInfo] = useState(null);
   const [labError, setLabError] = useState(null);
-
-  const [builders, setBuilders] = useState([]);
-
   const [simulationFees, setSimulationFees] = useState(null);
   const [simulatedRegisterKey, setSimulatedRegisterKey] = useState(null);
   const [labState, setLabState] = useState(null);
   const [labStateError, setLabStateError] = useState(null);
+  const [outgoingSponsorships, setOutgoingSponsorships] = useState(null);
+  const [sponsorshipsError, setSponsorshipsError] = useState(null);
   const [adminState, setAdminState] = useState(null);
   const [proposeAdminForm, setProposeAdminForm] = useState({ address: "" });
   const [registerForm, setRegisterForm] = useState({ name: "" });
@@ -504,6 +501,35 @@ export default function App() {
   }, []);
 
   useEffect(() => () => cancelHorizonReads(), []);
+
+  // Outgoing sponsorships are a read-only Horizon view. Reload them when the
+  // connected account or the selected network changes.
+  useEffect(() => {
+    if (!publicKey) {
+      setOutgoingSponsorships([]);
+      setSponsorshipsError(null);
+      return undefined;
+    }
+
+    let cancelled = false;
+    setOutgoingSponsorships(null);
+    setSponsorshipsError(null);
+    getOutgoingSponsorships(publicKey)
+      .then((rows) => {
+        if (!cancelled) setOutgoingSponsorships(rows);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setOutgoingSponsorships([]);
+        setSponsorshipsError(
+          err.message || "Could not read sponsorships from Horizon."
+        );
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [publicKey, networkId]);
 
   useEffect(() => {
     if (activeTab !== "Offers" || !publicKey) return;
@@ -3205,6 +3231,34 @@ export default function App() {
                       </a>
                     </div>
                   )}
+                  <div className="info-box">
+                    <span className="eyebrow">Sponsorships given</span>
+                    {sponsorshipsError ? (
+                      <p className="muted">{sponsorshipsError}</p>
+                    ) : outgoingSponsorships === null ? (
+                      <p className="muted">Reading sponsorships…</p>
+                    ) : outgoingSponsorships.length === 0 ? (
+                      <p className="muted">No outgoing sponsorships.</p>
+                    ) : (
+                      <ul className="balance-list">
+                        {outgoingSponsorships.map((sponsorship) => (
+                          <li
+                            key={`${sponsorship.sponsoredAccount}-${sponsorship.entryType}`}
+                            className="balance-row"
+                          >
+                            <div>
+                              <strong>
+                                {shortenAddress(sponsorship.sponsoredAccount)}
+                              </strong>
+                              <span className="muted balance-row__issuer">
+                                {sponsorship.entryType}
+                              </span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                   <div className="section__row">
                     <button className="btn btn--secondary" type="button" onClick={handleDisconnect}>
                       Disconnect
@@ -6771,39 +6825,6 @@ export default function App() {
                       </div>
                     </div>
                   </div>
-                </>
-              )}
-              {publicKey && (
-                <div className="section">
-                  <h2>Download Builders</h2>
-                  {labInfo && labInfo.network.contract
-                    ? builders.length > 0 ? (
-                      <button
-                        className="btn btn--secondary"
-                        type="button"
-                        onClick={() => {
-                          const csv = toCsv(builders);
-                          const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-                          const url = URL.createObjectURL(blob);
-                          const a = document.createElement("a");
-                          a.href = url;
-                          a.download = "builders.csv";
-                          a.click();
-                          URL.revokeObjectURL(url);
-                        }}
-                      >
-                        Download CSV
-                      </button>
-                    ) : (
-                      <p className="muted">No builders to export.</p>
-                    )
-                    : (
-                      <p className="muted">No contract instance loaded.</p>
-                    )}
-                </div>
-              )}
-              {!labInfo && !labError && (
-                <p className="muted">Open this tab to probe the backend.</p>
 
                   {decodedEnvelope.operations.map((operation, index) => (
                     <div key={`${operation.type}-${index}`} className="info-box">
@@ -6879,7 +6900,6 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-
               )}
             </div>
           )}
